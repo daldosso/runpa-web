@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function HomePage() {
-  const [activities, setActivities] = useState<any[]>([]);
+  type Activity = {
+    id: number;
+    name: string;
+    distance: number;
+  };
+
+  const [activities, setActivities] = useState<Activity[]>([]);
+
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
 
