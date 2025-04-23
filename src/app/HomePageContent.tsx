@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Head from "next/head";
+import Image from "next/image";
 
 type Activity = {
   id: number;
@@ -48,7 +50,11 @@ export default function HomePageContent() {
   };
 
   return (
-    <main className="p-4">
+    <main className="p-4 text-center">
+      <Head>
+        <title>Podistica Arona</title>
+      </Head>
+
       <h1 className="text-2xl font-bold mb-4">RunPA Web</h1>
 
       {!token && (
@@ -56,7 +62,7 @@ export default function HomePageContent() {
           onClick={handleLogin}
           className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
         >
-          Carica le tue attività su Strava
+          Carica le tue attività di Strava
         </button>
       )}
 
@@ -71,6 +77,18 @@ export default function HomePageContent() {
           ))}
         </ul>
       )}
+
+      <footer className="mt-10">
+        <div className="flex justify-center items-center gap-2">
+          <span className="text-sm">Made with ❤️ by Podistica Arona</span>
+          <Image
+            src="https://www.podisticaarona.it/wp-content/uploads/2024/02/cropped-podisticaarona_logo.png"
+            alt="Podistica Arona Logo"
+            width={32}
+            height={32}
+          />
+        </div>
+      </footer>
     </main>
   );
 }
