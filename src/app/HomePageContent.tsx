@@ -58,12 +58,18 @@ export default function HomePageContent() {
       <h1 className="text-2xl font-bold mb-4">RunPA Web</h1>
 
       {!token && (
-        <button
-          onClick={handleLogin}
-          className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
+        <a
+          href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/strava/web-callback-init`}
+          className="inline-block"
         >
-          Carica le tue attività di Strava
-        </button>
+          <Image
+            src="https://strava.com/assets/connect_strava@2x.png"
+            alt="Connect with Strava"
+            width={210}
+            height={35}
+            priority
+          />
+        </a>
       )}
 
       {loading && <p>⏳ Caricamento attività...</p>}
