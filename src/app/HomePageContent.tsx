@@ -59,7 +59,7 @@ export default function HomePageContent() {
           className="inline-block"
         >
           <Image
-            src="https://strava.com/assets/connect_strava@2x.png"
+            src="/strava/btn_strava_connectwith_orange.png"
             alt="Connect with Strava"
             width={210}
             height={35}
