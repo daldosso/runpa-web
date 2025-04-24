@@ -12,7 +12,7 @@ export default function PrivacyPage() {
           🔐 Privacy Policy for RunPA
         </h2>
         <p className="mb-2">
-          \ RunPA is a non-commercial application developed for members of the
+          RunPA is a non-commercial application developed for members of the
           Podistica Arona running group. This application uses the Strava API to
           allow authenticated users to view their own activity data.
         </p>
@@ -32,12 +32,12 @@ export default function PrivacyPage() {
           </li>
         </ul>
         <p className="mb-2">
-          \ All access tokens are stored securely and used only for
-          authenticated API requests. No data is sold or shared with third
-          parties. You can revoke access at any time via your Strava settings.
+          All access tokens are stored securely and used only for authenticated
+          API requests. No data is sold or shared with third parties. You can
+          revoke access at any time via your Strava settings.
         </p>
         <p className="italic">
-          \ This application uses the Strava API but is{" "}
+          This application uses the Strava API but is{" "}
           <strong>not endorsed or certified</strong> by Strava, Inc.
         </p>
       </section>
