@@ -25,9 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        {children}
+        <main className="flex-grow">{children}</main>
+
+        <footer className="w-full text-center py-4 border-t text-sm text-gray-500">
+          <a href="/privacy" className="hover:underline">
+            Privacy Policy & Security
+          </a>
+        </footer>
       </body>
     </html>
   );
