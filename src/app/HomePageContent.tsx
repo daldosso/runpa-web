@@ -45,10 +45,6 @@ export default function HomePageContent() {
     fetchActivities();
   }, [token]);
 
-  const handleLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/strava/web-callback-init`;
-  };
-
   return (
     <main className="p-4 text-center">
       <Head>
