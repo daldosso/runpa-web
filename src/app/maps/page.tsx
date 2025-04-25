@@ -29,6 +29,8 @@ export default function MapsPage() {
   const [athletes, setAthletes] = useState<AthleteMarker[]>([]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const fetchAthletes = async () => {
       try {
         const res = await fetch(
