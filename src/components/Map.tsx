@@ -1,14 +1,14 @@
-// components/Map.tsx
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import L, { LatLngBoundsExpression } from "leaflet";
 
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadowUrl from "leaflet/dist/images/marker-shadow.png";
 
+// Fix Leaflet's default marker icons
 const DefaultIcon = L.icon({
   iconUrl: iconUrl.src,
   shadowUrl: iconShadowUrl.src,
@@ -22,6 +22,10 @@ interface AthleteMarker {
   lat: number;
   lng: number;
   avatar?: string;
+  last_activity_name?: string;
+  last_activity_distance?: number;
+  last_activity_type?: string;
+  last_activity_date?: string;
 }
 
 interface RawAthlete {
@@ -31,6 +35,29 @@ interface RawAthlete {
   last_lat?: number;
   last_lng?: number;
   profile_medium?: string;
+  last_activity?: {
+    name: string;
+    distance: number;
+    type: string;
+    start_date_local: string;
+  };
+}
+
+// FitBounds to make all markers visible
+function FitBoundsHelper({ athletes }: { athletes: AthleteMarker[] }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (athletes.length > 0) {
+      const bounds: LatLngBoundsExpression = athletes.map((a) => [
+        a.lat,
+        a.lng,
+      ]);
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, [athletes, map]);
+
+  return null;
 }
 
 export default function Map() {
@@ -48,6 +75,10 @@ export default function Map() {
         lat: a.last_lat || 45.758,
         lng: a.last_lng || 8.556,
         avatar: a.profile_medium || undefined,
+        last_activity_name: a.last_activity?.name,
+        last_activity_distance: a.last_activity?.distance,
+        last_activity_type: a.last_activity?.type,
+        last_activity_date: a.last_activity?.start_date_local,
       }));
       setAthletes(formatted);
     };
@@ -79,10 +110,29 @@ export default function Map() {
                   className="mt-2 mx-auto rounded-full w-12 h-12 object-cover"
                 />
               )}
+              {athlete.last_activity_name && (
+                <div className="mt-2 text-sm text-left">
+                  <p>
+                    <strong>🏃 Attività:</strong> {athlete.last_activity_name}
+                  </p>
+                  <p>
+                    <strong>📏 Distanza:</strong>{" "}
+                    {(athlete.last_activity_distance! / 1000).toFixed(2)} km
+                  </p>
+                  <p>
+                    <strong>📅 Data:</strong>{" "}
+                    {new Date(athlete.last_activity_date!).toLocaleDateString()}
+                  </p>
+                  <p>
+                    <strong>⛳ Tipo:</strong> {athlete.last_activity_type}
+                  </p>
+                </div>
+              )}
             </div>
           </Popup>
         </Marker>
       ))}
+      <FitBoundsHelper athletes={athletes} />
     </MapContainer>
   );
 }
