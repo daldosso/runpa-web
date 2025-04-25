@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L, { LatLngBoundsExpression, Marker as LeafletMarker } from "leaflet";
+import L, { LatLngBoundsExpression } from "leaflet";
 
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadowUrl from "leaflet/dist/images/marker-shadow.png";
 
+// Fix Leaflet's default marker icons
 const DefaultIcon = L.icon({
   iconUrl: iconUrl.src,
   shadowUrl: iconShadowUrl.src,
@@ -33,12 +34,12 @@ interface RawAthlete {
   lastname: string;
   last_lat?: number;
   last_lng?: number;
-  profile_medium?: string;
+  profile?: string;
   last_activity?: {
     name: string;
     distance: number;
     type: string;
-    start_date_local: string;
+    start_date: string;
   };
 }
 
@@ -60,7 +61,6 @@ function FitBoundsHelper({ athletes }: { athletes: AthleteMarker[] }) {
 
 export default function Map() {
   const [athletes, setAthletes] = useState<AthleteMarker[]>([]);
-  const markerRefs = useRef<Record<number, LeafletMarker>>(Object.create(null));
 
   useEffect(() => {
     const fetchAthletes = async () => {
@@ -70,27 +70,20 @@ export default function Map() {
       const data = await res.json();
       const formatted = (data as RawAthlete[]).map((a) => ({
         id: a.id,
-        name: `${a.firstname} ${a.lastname}`,
+        name: a.firstname,
         lat: a.last_lat || 45.758,
         lng: a.last_lng || 8.556,
-        avatar: a.profile_medium || undefined,
+        avatar: a.profile || undefined,
         last_activity_name: a.last_activity?.name,
         last_activity_distance: a.last_activity?.distance,
         last_activity_type: a.last_activity?.type,
-        last_activity_date: a.last_activity?.start_date_local,
+        last_activity_date: a.last_activity?.start_date,
       }));
       setAthletes(formatted);
     };
 
     fetchAthletes();
   }, []);
-
-  useEffect(() => {
-    // Open all popups after map is rendered
-    Object.values(markerRefs.current).forEach((marker) => {
-      marker.openPopup();
-    });
-  }, [athletes]);
 
   return (
     <MapContainer
@@ -103,16 +96,9 @@ export default function Map() {
         attribution="&copy; OpenStreetMap contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-
       {athletes.map((athlete) => (
-        <Marker
-          key={athlete.id}
-          position={[athlete.lat, athlete.lng]}
-          ref={(ref) => {
-            if (ref) markerRefs.current[athlete.id] = ref;
-          }}
-        >
-          <Popup>
+        <Marker key={athlete.id} position={[athlete.lat, athlete.lng]}>
+          <Popup autoClose={false} closeButton={false} autoPan={false}>
             <div className="text-center">
               <strong>{athlete.name}</strong>
               {athlete.avatar && (
@@ -134,11 +120,12 @@ export default function Map() {
                   </p>
                   <p>
                     <strong>📅 Data:</strong>{" "}
-                    {athlete.last_activity_date
-                      ? new Date(
-                          athlete.last_activity_date
-                        ).toLocaleDateString()
-                      : "N/D"}
+                    {(() => {
+                      const d = new Date(athlete.last_activity_date || "");
+                      return isNaN(d.getTime())
+                        ? "N/D"
+                        : d.toLocaleDateString();
+                    })()}
                   </p>
                   <p>
                     <strong>⛳ Tipo:</strong> {athlete.last_activity_type}
@@ -149,7 +136,6 @@ export default function Map() {
           </Popup>
         </Marker>
       ))}
-
       <FitBoundsHelper athletes={athletes} />
     </MapContainer>
   );
