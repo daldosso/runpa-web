@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L, { LatLngBoundsExpression } from "leaflet";
+import L, { LatLngBoundsExpression, Marker as LeafletMarker } from "leaflet";
 
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadowUrl from "leaflet/dist/images/marker-shadow.png";
 
-// Fix Leaflet's default marker icons
 const DefaultIcon = L.icon({
   iconUrl: iconUrl.src,
   shadowUrl: iconShadowUrl.src,
@@ -43,7 +42,6 @@ interface RawAthlete {
   };
 }
 
-// FitBounds to make all markers visible
 function FitBoundsHelper({ athletes }: { athletes: AthleteMarker[] }) {
   const map = useMap();
 
@@ -62,6 +60,7 @@ function FitBoundsHelper({ athletes }: { athletes: AthleteMarker[] }) {
 
 export default function Map() {
   const [athletes, setAthletes] = useState<AthleteMarker[]>([]);
+  const markerRefs = useRef<Record<number, LeafletMarker>>(Object.create(null));
 
   useEffect(() => {
     const fetchAthletes = async () => {
@@ -86,6 +85,13 @@ export default function Map() {
     fetchAthletes();
   }, []);
 
+  useEffect(() => {
+    // Open all popups after map is rendered
+    Object.values(markerRefs.current).forEach((marker) => {
+      marker.openPopup();
+    });
+  }, [athletes]);
+
   return (
     <MapContainer
       center={[45.758, 8.556]}
@@ -97,8 +103,15 @@ export default function Map() {
         attribution="&copy; OpenStreetMap contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+
       {athletes.map((athlete) => (
-        <Marker key={athlete.id} position={[athlete.lat, athlete.lng]}>
+        <Marker
+          key={athlete.id}
+          position={[athlete.lat, athlete.lng]}
+          ref={(ref) => {
+            if (ref) markerRefs.current[athlete.id] = ref;
+          }}
+        >
           <Popup>
             <div className="text-center">
               <strong>{athlete.name}</strong>
@@ -121,7 +134,11 @@ export default function Map() {
                   </p>
                   <p>
                     <strong>📅 Data:</strong>{" "}
-                    {new Date(athlete.last_activity_date!).toLocaleDateString()}
+                    {athlete.last_activity_date
+                      ? new Date(
+                          athlete.last_activity_date
+                        ).toLocaleDateString()
+                      : "N/D"}
                   </p>
                   <p>
                     <strong>⛳ Tipo:</strong> {athlete.last_activity_type}
@@ -132,6 +149,7 @@ export default function Map() {
           </Popup>
         </Marker>
       ))}
+
       <FitBoundsHelper athletes={athletes} />
     </MapContainer>
   );
