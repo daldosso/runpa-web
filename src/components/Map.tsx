@@ -22,24 +22,24 @@ interface AthleteMarker {
   lat: number;
   lng: number;
   avatar?: string;
-  last_activity_name?: string;
-  last_activity_distance?: number;
-  last_activity_type?: string;
-  last_activity_date?: string;
+  activity_name?: string;
+  activity_distance?: number;
+  activity_date?: string;
 }
 
-interface RawAthlete {
-  id: number;
-  firstname: string;
-  lastname: string;
-  last_lat?: number;
-  last_lng?: number;
-  profile?: string;
-  last_activity?: {
+interface RawFarthestAthlete {
+  athlete: {
+    id: number;
+    firstname: string;
+    lastname: string;
+  };
+  farthest_activity?: {
+    id: number;
     name: string;
     distance: number;
-    type: string;
+    start_latlng: [number, number];
     start_date: string;
+    distance_from_arona_km: number;
   };
 }
 
@@ -61,29 +61,44 @@ function FitBoundsHelper({ athletes }: { athletes: AthleteMarker[] }) {
 
 export default function Map() {
   const [athletes, setAthletes] = useState<AthleteMarker[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAthletes = async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/strava/athletes`
-      );
-      const data = await res.json();
-      const formatted = (data as RawAthlete[]).map((a) => ({
-        id: a.id,
-        name: a.firstname,
-        lat: a.last_lat || 45.758,
-        lng: a.last_lng || 8.556,
-        avatar: a.profile || undefined,
-        last_activity_name: a.last_activity?.name,
-        last_activity_distance: a.last_activity?.distance,
-        last_activity_type: a.last_activity?.type,
-        last_activity_date: a.last_activity?.start_date,
-      }));
-      setAthletes(formatted);
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/strava/farthest-activities`
+        );
+        const data = await res.json();
+        const formatted = (data as RawFarthestAthlete[])
+          .filter((a) => a.farthest_activity?.start_latlng) // ensure there are valid coordinates
+          .map((a) => ({
+            id: a.athlete.id,
+            name: `${a.athlete.firstname} ${a.athlete.lastname}`,
+            lat: a.farthest_activity!.start_latlng[0],
+            lng: a.farthest_activity!.start_latlng[1],
+            activity_name: a.farthest_activity?.name,
+            activity_distance: a.farthest_activity?.distance,
+            activity_date: a.farthest_activity?.start_date,
+          }));
+        setAthletes(formatted);
+      } catch (error) {
+        console.error("❌ Failed to fetch farthest activities:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchAthletes();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[500px]">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <MapContainer
@@ -101,34 +116,23 @@ export default function Map() {
           <Popup autoClose={false} closeButton={false} autoPan={false}>
             <div className="text-center">
               <strong>{athlete.name}</strong>
-              {athlete.avatar && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={athlete.avatar}
-                  alt={athlete.name}
-                  className="mt-2 mx-auto rounded-full w-12 h-12 object-cover"
-                />
-              )}
-              {athlete.last_activity_name && (
+              {athlete.activity_name && (
                 <div className="mt-2 text-sm text-left">
                   <p>
-                    <strong>🏃 Attività:</strong> {athlete.last_activity_name}
+                    <strong>🏃 Attività:</strong> {athlete.activity_name}
                   </p>
                   <p>
                     <strong>📏 Distanza:</strong>{" "}
-                    {(athlete.last_activity_distance! / 1000).toFixed(2)} km
+                    {(athlete.activity_distance! / 1000).toFixed(2)} km
                   </p>
                   <p>
                     <strong>📅 Data:</strong>{" "}
                     {(() => {
-                      const d = new Date(athlete.last_activity_date || "");
+                      const d = new Date(athlete.activity_date || "");
                       return isNaN(d.getTime())
                         ? "N/D"
                         : d.toLocaleDateString();
                     })()}
-                  </p>
-                  <p>
-                    <strong>⛳ Tipo:</strong> {athlete.last_activity_type}
                   </p>
                 </div>
               )}
