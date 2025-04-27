@@ -25,6 +25,7 @@ interface AthleteMarker {
   activity_name?: string;
   activity_distance?: number;
   activity_date?: string;
+  activity_location?: string;
 }
 
 interface RawFarthestAthlete {
@@ -40,6 +41,11 @@ interface RawFarthestAthlete {
     start_latlng: [number, number];
     start_date: string;
     distance_from_arona_km: number;
+    location?: {
+      city?: string;
+      state?: string;
+      country?: string;
+    };
   };
 }
 
@@ -74,12 +80,13 @@ export default function Map() {
           .filter((a) => a.farthest_activity?.start_latlng) // ensure there are valid coordinates
           .map((a) => ({
             id: a.athlete.id,
-            name: `${a.athlete.firstname} ${a.athlete.lastname}`,
+            name: `${a.athlete.firstname}`, // solo il nome
             lat: a.farthest_activity!.start_latlng[0],
             lng: a.farthest_activity!.start_latlng[1],
             activity_name: a.farthest_activity?.name,
             activity_distance: a.farthest_activity?.distance,
             activity_date: a.farthest_activity?.start_date,
+            activity_location: a.farthest_activity?.location?.city || undefined,
           }));
         setAthletes(formatted);
       } catch (error) {
@@ -114,19 +121,26 @@ export default function Map() {
       {athletes.map((athlete) => (
         <Marker key={athlete.id} position={[athlete.lat, athlete.lng]}>
           <Popup autoClose={false} closeButton={false} autoPan={false}>
-            <div className="text-center">
+            <div className="text-center p-2 text-sm">
+              {" "}
+              {/* meno padding */}
               <strong>{athlete.name}</strong>
+              {athlete.activity_location && (
+                <p className="mt-1 text-xs italic text-gray-500">
+                  📍 {athlete.activity_location}
+                </p>
+              )}
               {athlete.activity_name && (
-                <div className="mt-2 text-sm text-left">
+                <div className="mt-2 text-left space-y-1">
                   <p>
-                    <strong>🏃 Attività:</strong> {athlete.activity_name}
+                    <strong>🏃</strong> {athlete.activity_name}
                   </p>
                   <p>
-                    <strong>📏 Distanza:</strong>{" "}
+                    <strong>📏</strong>{" "}
                     {(athlete.activity_distance! / 1000).toFixed(2)} km
                   </p>
                   <p>
-                    <strong>📅 Data:</strong>{" "}
+                    <strong>📅</strong>{" "}
                     {(() => {
                       const d = new Date(athlete.activity_date || "");
                       return isNaN(d.getTime())

@@ -9,7 +9,7 @@ const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 export default function MapsPage() {
   return (
     <main className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Podistica Map</h1>
+      <h1 className="text-2xl font-bold mb-4">Podistici nel mondo</h1>
       <div className="rounded overflow-hidden shadow">
         <Map />
       </div>
