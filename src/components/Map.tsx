@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -21,7 +22,7 @@ interface AthleteMarker {
   name: string;
   lat: number;
   lng: number;
-  avatar?: string;
+  avatar?: string; // profile image
   activity_name?: string;
   activity_distance?: number;
   activity_date?: string;
@@ -33,6 +34,7 @@ interface RawFarthestAthlete {
     id: number;
     firstname: string;
     lastname: string;
+    profile?: string;
   };
   farthest_activity?: {
     id: number;
@@ -77,12 +79,13 @@ export default function Map() {
         );
         const data = await res.json();
         const formatted = (data as RawFarthestAthlete[])
-          .filter((a) => a.farthest_activity?.start_latlng) // ensure there are valid coordinates
+          .filter((a) => a.farthest_activity?.start_latlng)
           .map((a) => ({
             id: a.athlete.id,
-            name: `${a.athlete.firstname}`, // solo il nome
+            name: a.athlete.firstname, // solo nome
             lat: a.farthest_activity!.start_latlng[0],
             lng: a.farthest_activity!.start_latlng[1],
+            avatar: a.athlete.profile || undefined, // profile image
             activity_name: a.farthest_activity?.name,
             activity_distance: a.farthest_activity?.distance,
             activity_date: a.farthest_activity?.start_date,
@@ -122,8 +125,15 @@ export default function Map() {
         <Marker key={athlete.id} position={[athlete.lat, athlete.lng]}>
           <Popup autoClose={false} closeButton={false} autoPan={false}>
             <div className="text-center p-2 text-sm">
-              {" "}
-              {/* meno padding */}
+              {athlete.avatar && (
+                <div className="flex justify-center mb-1">
+                  <img
+                    src={athlete.avatar}
+                    alt="avatar"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                </div>
+              )}
               <strong>{athlete.name}</strong>
               {athlete.activity_location && (
                 <p className="mt-1 text-xs italic text-gray-500">
