@@ -23,7 +23,7 @@ export default function Arona10KPage() {
       <section className="bg-white border rounded p-4 shadow-sm">
         <h2 className="text-xl font-semibold mb-2">Panoramica</h2>
         <p className="text-sm text-gray-700">
-          L'Arona 10K è una corsa su strada di 10 chilometri che si svolge nel centro storico e lungo il lungolago di Arona. L'evento comprende la gara competitiva (10 km) e una camminata non competitiva di 5 km.
+          L&apos;Arona 10K è una corsa su strada di 10 chilometri che si svolge nel centro storico e lungo il lungolago di Arona. L&apos;evento comprende la gara competitiva (10 km) e una camminata non competitiva di 5 km.
         </p>
       </section>
 
@@ -33,13 +33,13 @@ export default function Arona10KPage() {
           <ul className="mt-2 text-sm text-gray-700 space-y-1">
             <li><strong>Giorno evento:</strong> Febbraio 2026 (controlla la data ufficiale sul sito organizzatore)</li>
             <li><strong>Iscrizioni online:</strong> tramite il servizio Endu (link ufficiale nella sezione link utili)</li>
-            <li><strong>Iscrizioni in loco:</strong> disponibili la mattina dell'evento ai tavoli predisposti (se prevista)</li>
+            <li><strong>Iscrizioni in loco:</strong> disponibili la mattina dell&apos;evento ai tavoli predisposti (se prevista)</li>
           </ul>
         </article>
 
         <article className="bg-white border rounded p-4">
           <h3 className="font-semibold">Quote</h3>
-          <p className="mt-2 text-sm text-gray-700">Le quote variano in base alla data di iscrizione, con una progressione che sale avvicinandosi all'evento. Consulta la pagina ufficiale per le date precise delle fasce di prezzo.</p>
+          <p className="mt-2 text-sm text-gray-700">Le quote variano in base alla data di iscrizione, con una progressione che sale avvicinandosi all&apos;evento. Consulta la pagina ufficiale per le date precise delle fasce di prezzo.</p>
         </article>
       </section>
 
@@ -55,7 +55,7 @@ export default function Arona10KPage() {
 
       <section className="bg-white border rounded p-4">
         <h3 className="font-semibold">Premi e categorie</h3>
-        <p className="text-sm text-gray-700">Sono previsti premi per le posizioni assolute e per le categorie d'età. Alcune categorie possono ricevere premi in natura o buoni valore; la distribuzione è indicata nel regolamento ufficiale.</p>
+        <p className="text-sm text-gray-700">Sono previsti premi per le posizioni assolute e per le categorie d&apos;età. Alcune categorie possono ricevere premi in natura o buoni valore; la distribuzione è indicata nel regolamento ufficiale.</p>
       </section>
 
       <section className="bg-white border rounded p-4">
