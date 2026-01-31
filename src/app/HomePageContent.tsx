@@ -59,9 +59,13 @@ export default function HomePageContent() {
       </Head>
 
       {/* Hero */}
-      <section className="bg-gradient-to-r from-orange-200 to-white rounded-lg p-8 shadow-md flex flex-col md:flex-row items-center gap-6">
+      <section className="bg-gradient-to-r from-sky-100 via-sky-200 to-white rounded-lg p-8 shadow-md flex flex-col md:flex-row items-center gap-6">
         <div className="flex-1 text-center md:text-left">
-          <h1 className="text-3xl md:text-4xl font-extrabold">Benvenuti su <span className="text-orange-600">RunPA</span></h1>
+          <div className="flex items-center justify-center md:justify-start gap-3">
+            <Image src="/podistica-arona.png" alt="Podistica Arona" width={52} height={52} />
+            <h1 className="text-3xl md:text-4xl font-extrabold">Benvenuti su <span className="text-sky-600">RunPA</span></h1>
+          </div>
+
           <p className="mt-2 text-gray-700">Visualizza le tue attività Strava, esplora la comunità e scopri i percorsi più lontani dall'Arona.</p>
 
           <div className="mt-4 flex justify-center md:justify-start gap-3">
@@ -70,7 +74,7 @@ export default function HomePageContent() {
                 <Image src="/strava/btn_strava_connectwith_orange.png" alt="Connect with Strava" width={210} height={35} priority />
               </a>
             ) : (
-              <div className="bg-green-50 border border-green-200 rounded px-4 py-2 text-sm">
+              <div className="bg-sky-50 border border-sky-200 rounded px-4 py-2 text-sm text-sky-700">
                 ✅ Connesso a Strava — {activities.length} attività ({totalKm} km totali)
               </div>
             )}
@@ -92,7 +96,7 @@ export default function HomePageContent() {
 
         {loading && (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-sky-500"></div>
             <p className="mt-3">Caricamento attività...</p>
           </div>
         )}
@@ -136,7 +140,7 @@ export default function HomePageContent() {
       <footer className="mt-6 py-6 border-t">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
-            <Image src="https://www.podisticaarona.it/wp-content/uploads/2024/02/cropped-podisticaarona_logo.png" alt="Podistica Arona Logo" width={40} height={40} />
+            <Image src="/podistica-arona.png" alt="Podistica Arona Logo" width={40} height={40} />
             <span className="text-sm">© Podistica Arona — Made with ❤️</span>
           </div>
 
