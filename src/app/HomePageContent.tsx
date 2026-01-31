@@ -94,8 +94,8 @@ export default function HomePageContent() {
           </div>
         </div>
 
-        <div className="w-48 h-48 relative hidden md:block">
-          <Image src="/strava/strava-hero.png" alt="Running illustration" fill style={{ objectFit: 'contain' }} />
+        <div className="w-48 h-48 hidden md:flex items-center justify-center rounded-full bg-sky-50">
+          <span className="text-sky-600 text-4xl" aria-hidden>🏃</span>
         </div>
       </section>
 
