@@ -5,6 +5,9 @@ import { useSearchParams } from "next/navigation";
 import Head from "next/head";
 import Image from "next/image";
 
+import BlogList from "../components/BlogList";
+import Map from "../components/Map";
+
 type Activity = {
   id: number;
   name: string;
@@ -45,50 +48,101 @@ export default function HomePageContent() {
     fetchActivities();
   }, [token]);
 
+  const totalKm = (
+    activities.reduce((sum, a) => sum + a.distance, 0) / 1000
+  ).toFixed(1);
+
   return (
-    <main className="p-4 text-center">
+    <main className="max-w-5xl mx-auto p-6 space-y-10">
       <Head>
-        <title>Podistica Arona</title>
+        <title>Podistica Arona — RunPA Web</title>
       </Head>
 
-      <h1 className="text-2xl font-bold mb-4">RunPA Web</h1>
+      {/* Hero */}
+      <section className="bg-gradient-to-r from-orange-200 to-white rounded-lg p-8 shadow-md flex flex-col md:flex-row items-center gap-6">
+        <div className="flex-1 text-center md:text-left">
+          <h1 className="text-3xl md:text-4xl font-extrabold">Benvenuti su <span className="text-orange-600">RunPA</span></h1>
+          <p className="mt-2 text-gray-700">Visualizza le tue attività Strava, esplora la comunità e scopri i percorsi più lontani dall'Arona.</p>
 
-      {!token && (
-        <a
-          href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/strava/web-callback-init`}
-          className="inline-block"
-        >
-          <Image
-            src="/strava/btn_strava_connectwith_orange.png"
-            alt="Connect with Strava"
-            width={210}
-            height={35}
-            priority
-          />
-        </a>
-      )}
+          <div className="mt-4 flex justify-center md:justify-start gap-3">
+            {!token ? (
+              <a href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/strava/web-callback-init`} className="inline-block">
+                <Image src="/strava/btn_strava_connectwith_orange.png" alt="Connect with Strava" width={210} height={35} priority />
+              </a>
+            ) : (
+              <div className="bg-green-50 border border-green-200 rounded px-4 py-2 text-sm">
+                ✅ Connesso a Strava — {activities.length} attività ({totalKm} km totali)
+              </div>
+            )}
 
-      {loading && <p>⏳ Caricamento attività...</p>}
+            <a href="/blog" className="inline-flex items-center px-4 py-2 bg-white border rounded shadow-sm text-sm">
+              📰 Blog
+            </a>
+          </div>
+        </div>
 
-      {!loading && token && activities.length > 0 && (
-        <ul className="mt-4">
-          {activities.map((a) => (
-            <li key={a.id} className="mb-2">
-              <strong>{a.name}</strong> – {(a.distance / 1000).toFixed(2)} km
-            </li>
-          ))}
-        </ul>
-      )}
+        <div className="w-48 h-48 relative hidden md:block">
+          <Image src="/strava/strava-hero.png" alt="Running illustration" fill style={{ objectFit: 'contain' }} />
+        </div>
+      </section>
 
-      <footer className="mt-10">
-        <div className="flex justify-center items-center gap-2">
-          <span className="text-sm">Made with ❤️ by Podistica Arona</span>
-          <Image
-            src="https://www.podisticaarona.it/wp-content/uploads/2024/02/cropped-podisticaarona_logo.png"
-            alt="Podistica Arona Logo"
-            width={32}
-            height={32}
-          />
+      {/* Activities */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">Le ultime attività</h2>
+
+        {loading && (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-orange-500"></div>
+            <p className="mt-3">Caricamento attività...</p>
+          </div>
+        )}
+
+        {!loading && !token && (
+          <p className="text-sm text-gray-600">Collega il tuo account Strava per vedere le tue attività qui.</p>
+        )}
+
+        {!loading && token && activities.length === 0 && (
+          <p className="text-sm text-gray-600">Nessuna attività trovata.</p>
+        )}
+
+        {!loading && activities.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {activities.slice(0, 6).map((a) => (
+              <article key={a.id} className="border rounded p-4 shadow-sm">
+                <h3 className="font-semibold">{a.name}</h3>
+                <p className="text-sm text-gray-600">{(a.distance / 1000).toFixed(2)} km</p>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Community map */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">Mappa della comunità</h2>
+        <div className="rounded overflow-hidden shadow">
+          <Map />
+        </div>
+      </section>
+
+      {/* Blog */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">Ultimi dal blog</h2>
+        <div className="bg-white border rounded p-4 shadow-sm">
+          <BlogList />
+        </div>
+      </section>
+
+      <footer className="mt-6 py-6 border-t">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-3">
+            <Image src="https://www.podisticaarona.it/wp-content/uploads/2024/02/cropped-podisticaarona_logo.png" alt="Podistica Arona Logo" width={40} height={40} />
+            <span className="text-sm">© Podistica Arona — Made with ❤️</span>
+          </div>
+
+          <div className="text-sm text-gray-600">
+            <a href="/privacy" className="underline">Privacy</a>
+          </div>
         </div>
       </footer>
     </main>
