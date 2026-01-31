@@ -6,7 +6,16 @@ import Head from "next/head";
 import Image from "next/image";
 
 import BlogList from "../components/BlogList";
-import Map from "../components/Map";
+import dynamic from "next/dynamic";
+
+const Map = dynamic(() => import("../components/Map"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[500px] flex items-center justify-center">
+      <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-sky-500"></div>
+    </div>
+  ),
+});
 
 type Activity = {
   id: number;
