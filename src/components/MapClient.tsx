@@ -1,19 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import dynamic from "next/dynamic";
-
-const MapClient = dynamic(() => import("./MapClient"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-[500px] flex items-center justify-center">
-      <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-sky-500"></div>
-    </div>
-  ),
-});
-
-export default function Map() {
-  return <MapClient />;
-}
+import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L, { LatLngBoundsExpression } from "leaflet";
 
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadowUrl from "leaflet/dist/images/marker-shadow.png";
@@ -76,7 +67,7 @@ function FitBoundsHelper({ athletes }: { athletes: AthleteMarker[] }) {
   return null;
 }
 
-export default function Map() {
+export default function MapClient() {
   const [athletes, setAthletes] = useState<AthleteMarker[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -155,16 +146,12 @@ export default function Map() {
                     <strong>🏃</strong> {athlete.activity_name}
                   </p>
                   <p>
-                    <strong>📏</strong>{" "}
-                    {(athlete.activity_distance! / 1000).toFixed(2)} km
+                    <strong>📏</strong> {(athlete.activity_distance! / 1000).toFixed(2)} km
                   </p>
                   <p>
-                    <strong>📅</strong>{" "}
-                    {(() => {
+                    <strong>📅</strong> {(() => {
                       const d = new Date(athlete.activity_date || "");
-                      return isNaN(d.getTime())
-                        ? "N/D"
-                        : d.toLocaleDateString();
+                      return isNaN(d.getTime()) ? "N/D" : d.toLocaleDateString();
                     })()}
                   </p>
                 </div>
