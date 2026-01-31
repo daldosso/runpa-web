@@ -71,7 +71,7 @@ export default function HomePageContent() {
       <section className="bg-gradient-to-r from-sky-100 via-sky-200 to-white rounded-lg p-8 shadow-md flex flex-col md:flex-row items-center gap-6">
         <div className="flex-1 text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-3">
-            <Image src="/podistica-arona.png" alt="Podistica Arona" width={52} height={52} />
+            <Image src="/podistica-arona.png" alt="Podistica Arona" width={84} height={84} className="rounded-full shadow-sm" />
             <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Benvenuti su <span className="text-sky-700">RunPA</span></h1>
           </div>
 
@@ -149,7 +149,7 @@ export default function HomePageContent() {
       <footer className="mt-6 py-6 border-t">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
-            <Image src="/podistica-arona.png" alt="Podistica Arona Logo" width={40} height={40} />
+            <Image src="/podistica-arona.png" alt="Podistica Arona Logo" width={56} height={56} className="rounded-full" />
             <span className="text-sm">© Podistica Arona — Made with ❤️</span>
           </div>
 
