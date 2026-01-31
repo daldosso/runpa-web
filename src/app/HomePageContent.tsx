@@ -70,10 +70,7 @@ export default function HomePageContent() {
       {/* Hero */}
       <section className="bg-gradient-to-r from-sky-100 via-sky-200 to-white rounded-lg p-8 shadow-md flex flex-col md:flex-row items-center gap-6">
         <div className="flex-1 text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-3">
-            <Image src="/podistica-arona.png" alt="Podistica Arona" width={84} height={84} className="rounded-full shadow-sm" />
-            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Benvenuti su <span className="text-sky-700">RunPA</span></h1>
-          </div>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Benvenuti su <span className="text-sky-700">RunPA</span></h1>
 
           <p className="mt-2 text-gray-700">Visualizza le tue attività Strava, esplora la comunità e scopri i percorsi più lontani dall&apos;Arona.</p>
 
@@ -94,8 +91,8 @@ export default function HomePageContent() {
           </div>
         </div>
 
-        <div className="w-48 h-48 hidden md:flex items-center justify-center rounded-full bg-sky-50">
-          <span className="text-sky-600 text-4xl" aria-hidden>🏃</span>
+        <div className="hidden md:flex items-center justify-center">
+          <Image src="/podistica-arona.png" alt="Podistica Arona" width={120} height={120} className="rounded-full shadow-lg" />
         </div>
       </section>
 
