@@ -72,10 +72,10 @@ export default function HomePageContent() {
         <div className="flex-1 text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-3">
             <Image src="/podistica-arona.png" alt="Podistica Arona" width={52} height={52} />
-            <h1 className="text-3xl md:text-4xl font-extrabold">Benvenuti su <span className="text-sky-600">RunPA</span></h1>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Benvenuti su <span className="text-sky-700">RunPA</span></h1>
           </div>
 
-          <p className="mt-2 text-gray-700">Visualizza le tue attività Strava, esplora la comunità e scopri i percorsi più lontani dall'Arona.</p>
+          <p className="mt-2 text-gray-700">Visualizza le tue attività Strava, esplora la comunità e scopri i percorsi più lontani dall&apos;Arona.</p>
 
           <div className="mt-4 flex justify-center md:justify-start gap-3">
             {!token ? (
@@ -88,7 +88,7 @@ export default function HomePageContent() {
               </div>
             )}
 
-            <a href="/blog" className="inline-flex items-center px-4 py-2 bg-white border rounded shadow-sm text-sm">
+            <a href="/blog" className="inline-flex items-center px-4 py-2 bg-sky-600 text-white border border-sky-600 rounded shadow-sm text-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300 transition-colors" aria-label="Vai al blog">
               📰 Blog
             </a>
           </div>
