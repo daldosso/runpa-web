@@ -70,7 +70,7 @@ export default function HomePageContent() {
       {/* Hero */}
       <section className="bg-gradient-to-r from-sky-100 via-sky-200 to-white rounded-lg p-8 shadow-md flex flex-col md:flex-row items-center gap-6">
         <div className="flex-1 text-center md:text-left">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Benvenuti su <span className="text-sky-700">RunPA</span></h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Benvenuti su <span className="text-sky-700">RunPA - Podistica Arona</span></h1>
 
           <p className="mt-2 text-gray-700">Visualizza le tue attività Strava, esplora la comunità e scopri i percorsi più lontani dall&apos;Arona.</p>
 
@@ -87,6 +87,9 @@ export default function HomePageContent() {
 
             <a href="/blog" className="inline-flex items-center px-4 py-2 bg-sky-600 text-white border border-sky-600 rounded shadow-sm text-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300 transition-colors" aria-label="Vai al blog">
               📰 Blog
+            </a>
+            <a href="/arona10k" className="inline-flex items-center px-4 py-2 bg-sky-600 text-white border border-sky-600 rounded shadow-sm text-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300 transition-colors" aria-label="Vai all'evento Arona 10K">
+              📰 Arona 10k
             </a>
           </div>
         </div>
