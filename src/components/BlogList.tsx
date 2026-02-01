@@ -1,4 +1,3 @@
-// src/components/BlogList.tsx
 "use client";
 
 import { posts as staticPosts, Post } from "../content/blogPosts";
@@ -6,31 +5,41 @@ import { posts as staticPosts, Post } from "../content/blogPosts";
 export default function BlogList() {
   const posts: Post[] = staticPosts;
 
-  if (!posts || posts.length === 0) return <p>🔍 Nessun articolo disponibile.</p>;
+  if (!posts || posts.length === 0) {
+    // Used "text-muted" from our CSS variables
+    return <p className="text-sm text-muted">Nessun articolo disponibile.</p>;
+  }
 
   return (
-    <ul className="space-y-6">
+    <ul className="mx-auto max-w-3xl px-5 py-12 space-y-16">
       {posts.map((post) => (
-        <li key={post.id} className="border-b pb-4">
-          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
-            <div className="flex-1">
-              <h2 className="text-xl font-bold text-slate-900">{post.title}</h2>
-              <p className="mt-1 text-sm text-gray-700">{post.excerpt}</p>
-            </div>
+        <li key={post.id}>
+          {/* Metadata */}
+          <div className="mb-3 text-sm text-muted flex flex-wrap gap-x-3 gap-y-1">
+            <time dateTime={post.date}>
+              {new Date(post.date).toLocaleDateString()}
+            </time>
 
-            <div className="text-xs text-gray-500 md:text-right whitespace-nowrap">
-              <time dateTime={post.date}>{new Date(post.date).toLocaleDateString()}</time>
-              <div className="mt-2 flex gap-2 justify-start md:justify-end">
-                {(post.tags || []).map((t) => (
-                  <span key={t} className="text-xs bg-slate-100 px-2 py-1 rounded text-slate-700">
-                    #{t}
-                  </span>
-                ))}
-              </div>
-            </div>
+            {(post.tags || []).map((t) => (
+              <span
+                key={t}
+                // Changed to be more adaptive: light background on dark, or muted colors
+                className="rounded-full bg-accent/10 px-3 py-0.5 text-xs text-accent"
+              >
+                #{t}
+              </span>
+            ))}
           </div>
 
-          <p className="mt-3 text-sm text-gray-700">{post.body}</p>
+          {/* Title - Removed text-slate-900 to use global foreground color */}
+          <h2 className="text-2xl font-bold tracking-tight">
+            {post.title}
+          </h2>
+
+          {/* Excerpt - Removed text-gray-700 to inherit correctly */}
+          <p className="mt-4 text-base opacity-80 leading-relaxed">
+            {post.excerpt}
+          </p>
         </li>
       ))}
     </ul>
